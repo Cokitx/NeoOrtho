@@ -1,0 +1,187 @@
+.tutorial-help{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid #d4c7dd;border-radius:8px;background:white;color:#756280;font:11px 'Segoe UI',Arial,sans-serif;padding:8px 10px;cursor:pointer;margin-left:12px}.tutorial-help>span{border:1px solid #b5a2c1;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:10px}.tutorial-help:hover{background:#f4eef8;color:#642987}.portal-account{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+#welcomeTutorial{width:min(430px,calc(100% - 30px));max-width:430px;padding:30px;border:1px solid #d8cbe0;border-radius:16px;color:#62526d;box-shadow:0 20px 70px #37234520}#welcomeTutorial::backdrop{background:#30203c50;backdrop-filter:blur(3px)}.guide-eyebrow{font-size:9px;letter-spacing:1.6px;color:#92759f}#welcomeTutorial h2,#guideTitle{font:400 23px/1.3 'Segoe UI',Arial,sans-serif;letter-spacing:-.6px;color:#5c4668;margin:14px 0 12px}#welcomeTutorial p,#guideDescription{font:12px/1.8 'Segoe UI',Arial,sans-serif;color:#7c6c86;margin:8px 0 17px}#welcomeTutorial .guide-note{font-size:11px;color:#95839e}.guide-actions{display:flex;justify-content:space-between;gap:12px;margin-top:22px}.guide-actions button{font:11px 'Segoe UI',Arial,sans-serif;background:#fff;color:#7c638a;border:1px solid #d9cde1;padding:11px 13px;border-radius:8px;cursor:pointer}.guide-actions .guide-primary{background:#642987;color:white;border-color:#642987}.guide-actions button:disabled{opacity:.35;cursor:default}.guide-actions button:focus-visible,.tutorial-help:focus-visible,#closeGuide:focus-visible{outline:3px solid #baa0ce;outline-offset:3px}
+#guidedTour{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#65506f}#guidedTour::backdrop{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}#guideSpot{position:absolute;border:2px solid #a279bc;border-radius:10px;box-shadow:0 0 0 200vmax #2d1c3d85;pointer-events:none}#guideCard{position:absolute;padding:20px 23px;background:white;border:1px solid #d6c4e1;border-radius:13px;box-shadow:0 12px 35px #27123522;max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box}#guideCard h2{font-size:20px;margin-top:15px}.guide-top{display:flex;justify-content:space-between;align-items:center}#guideCount{font:9px 'Segoe UI',Arial,sans-serif;letter-spacing:1.1px;color:#9b83aa}#closeGuide{background:none;border:0;color:#8b7496;padding:4px 7px;cursor:pointer}.guide-progress{height:3px;background:#f0e8f5;border-radius:3px;margin-top:15px}.guide-progress i{display:block;height:3px;background:#ac8ac1;transition:width .2s;border-radius:3px}
+@media(max-width:600px){.tutorial-help{margin-left:4px;font-size:10px;padding:7px}.portal-account{gap:2px}#welcomeTutorial{padding:24px}.guide-actions{gap:8px}.guide-actions button{padding:10px}#guideCard{padding:17px}}
+@media(prefers-reduced-motion:reduce){.guide-progress i{transition:none}}
+
+
+
+/* Tutorial: blur global + alvo reconstruído 1:1 por cima da máscara.
+   Isso elimina vazamento do blur nas quinas e mantém o conteúdo selecionado nítido. */
+#guidedTour #guideMask{position:absolute;inset:0;pointer-events:none;z-index:0;background:rgba(45,28,61,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+#guidedTour #guideClone{position:absolute;overflow:hidden;pointer-events:none;z-index:2;background:#fff;box-shadow:none;transform:none!important;filter:none!important;opacity:1!important}
+#guidedTour #guideClone *{filter:none!important;opacity:1!important}
+#guidedTour #guideSpot{box-sizing:border-box;border:0!important;box-shadow:0 0 0 2px #a279bc!important;z-index:3;background:transparent;pointer-events:none}
+#guidedTour #guideCard{z-index:20}
+
+#guidedTour #guideClone, #guidedTour #guideClone *{animation:none!important;transition:none!important;transform:none!important;filter:none!important;opacity:1!important}
+
+
+/* Durante o tutorial nada da interface deve animar ou deslizar. */
+body.tutorial-active *,
+body.tutorial-active *::before,
+body.tutorial-active *::after{
+  animation:none !important;
+  transition:none !important;
+  scroll-behavior:auto !important;
+}
+
+/* O cartão do tutorial permanece estável; só muda de posição sem efeito. */
+#guidedTour #guideCard,
+#guidedTour #guideSpot,
+#guidedTour #guideClone{
+  transition:none !important;
+  animation:none !important;
+}
+
+/* Mantém o destaque dos botões inferiores com o mesmo acabamento visual. */
+#guidedTour #guideSpot{
+  outline:1px solid rgba(162,121,188,.22);
+  outline-offset:0;
+}
+
+
+/* Elementos destacados do tutorial que são botões/cards ficam sempre brancos. */
+#guidedTour #guideClone.button-like,
+#guidedTour #guideClone .guide-clone-buttonlike{
+  background:#ffffff !important;
+  border-color:#d9d4db !important;
+  box-shadow:0 8px 24px rgba(39,18,53,.08) !important;
+}
+
+#guidedTour #guideClone .guide-clone-buttonlike,
+#guidedTour #guideClone .guide-clone-buttonlike.access-card,
+#guidedTour #guideClone .guide-clone-buttonlike[type="button"]{
+  background:#ffffff !important;
+}
+
+#guidedTour #guideClone .guide-clone-buttonlike .access-arrow,
+#guidedTour #guideClone .guide-clone-buttonlike .access-icon,
+#guidedTour #guideClone .guide-clone-buttonlike .access-line,
+#guidedTour #guideClone .guide-clone-buttonlike .access-card-top,
+#guidedTour #guideClone .guide-clone-buttonlike .access-card-copy,
+#guidedTour #guideClone .guide-clone-buttonlike span,
+#guidedTour #guideClone .guide-clone-buttonlike strong,
+#guidedTour #guideClone .guide-clone-buttonlike small{
+  background-color:transparent !important;
+}
+
+
+/* Tudo que for destacado no tutorial deve aparecer claro/branco. */
+#guidedTour #guideClone.guide-clone-white{
+  background:#ffffff !important;
+  box-shadow:0 8px 24px rgba(39,18,53,.08) !important;
+}
+
+#guidedTour #guideClone .guide-clone-base{
+  background:#ffffff !important;
+  box-shadow:none !important;
+}
+
+/* Filhos internos preservam o layout, mas sem blocos escuros. */
+#guidedTour #guideClone .guide-clone-base *,
+#guidedTour #guideClone .guide-clone-base *::before,
+#guidedTour #guideClone .guide-clone-base *::after{
+  background-color:transparent !important;
+}
+
+/* Controles, campos e chips continuam com aparência branca. */
+#guidedTour #guideClone .guide-clone-base input,
+#guidedTour #guideClone .guide-clone-base textarea,
+#guidedTour #guideClone .guide-clone-base select,
+#guidedTour #guideClone .guide-clone-base button,
+#guidedTour #guideClone .guide-clone-base [role="button"],
+#guidedTour #guideClone .guide-clone-base .team-tab,
+#guidedTour #guideClone .guide-clone-base .filter-chip,
+#guidedTour #guideClone .guide-clone-base .access-card,
+#guidedTour #guideClone .guide-clone-base .shortcut-actions button,
+#guidedTour #guideClone .guide-clone-base .team-search,
+#guidedTour #guideClone .guide-clone-base .input,
+#guidedTour #guideClone .guide-clone-base .field,
+#guidedTour #guideClone .guide-clone-base .search-input,
+#guidedTour #guideClone .guide-clone-base .pill,
+#guidedTour #guideClone .guide-clone-base .card,
+#guidedTour #guideClone .guide-clone-base .metric,
+#guidedTour #guideClone .guide-clone-base .empty-state,
+#guidedTour #guideClone .guide-clone-base .audit-item{
+  background:#ffffff !important;
+}
+
+/* Bordas suaves para o conteúdo destacado seguir visível. */
+#guidedTour #guideClone .guide-clone-base,
+#guidedTour #guideClone .guide-clone-base input,
+#guidedTour #guideClone .guide-clone-base textarea,
+#guidedTour #guideClone .guide-clone-base select,
+#guidedTour #guideClone .guide-clone-base button,
+#guidedTour #guideClone .guide-clone-base [role="button"]{
+  border-color:#d9d4db !important;
+}
+
+
+/* O preenchimento branco precisa ocupar exatamente toda a área destacada. */
+#guidedTour #guideClone.guide-clone-white{
+  padding:0 !important;
+  background:#ffffff !important;
+}
+
+#guidedTour #guideClone .guide-clone-base{
+  position:absolute !important;
+}
+
+
+/* Texto e placeholder do elemento destacado precisam continuar legíveis. */
+#guidedTour #guideClone .guide-clone-base,
+#guidedTour #guideClone .guide-clone-base *{
+  text-shadow:none !important;
+}
+#guidedTour #guideClone .guide-clone-base input,
+#guidedTour #guideClone .guide-clone-base textarea,
+#guidedTour #guideClone .guide-clone-base select{
+  color:#4f4459 !important;
+  caret-color:#4f4459 !important;
+}
+#guidedTour #guideClone .guide-clone-base input::placeholder,
+#guidedTour #guideClone .guide-clone-base textarea::placeholder{
+  color:#7d7386 !important;
+  opacity:1 !important;
+}
+
+
+/* Se algum texto do elemento destacado vier muito claro, força leitura no fundo branco. */
+#guidedTour #guideClone .guide-clone-base,
+#guidedTour #guideClone .guide-clone-base input,
+#guidedTour #guideClone .guide-clone-base textarea,
+#guidedTour #guideClone .guide-clone-base select{
+  caret-color:#4f4459;
+}
+
+#guidedTour #guideClone .guide-clone-base ::placeholder{
+  color:#7b7283 !important;
+  opacity:1 !important;
+}
+
+#guidedTour #guideClone .guide-clone-base svg,
+#guidedTour #guideClone .guide-clone-base svg *,
+#guidedTour #guideClone .guide-clone-base i{
+  color:inherit;
+}
+
+
+/* MOBILE V6 — tutorial mais confortável no celular. */
+@media(max-width:620px){
+  #welcomeTutorial{
+    width:calc(100% - 24px)!important;
+    padding:22px 18px!important;
+    border-radius:14px!important;
+  }
+  #guideCard{
+    width:calc(100vw - 24px)!important;
+    max-width:calc(100vw - 24px)!important;
+    padding:18px!important;
+    border-radius:14px!important;
+  }
+  #guideCard h2{font-size:19px!important;line-height:1.28!important}
+  #guideDescription{font-size:12px!important;line-height:1.65!important}
+  #guideCard .guide-actions{gap:8px!important;margin-top:18px!important}
+  #guideCard .guide-actions button{flex:1 1 0!important;min-height:42px!important;padding:10px 8px!important}
+}
